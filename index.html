@@ -104,6 +104,16 @@ select option{background:var(--navy);color:var(--white)}
 .toast.error{border-color:#ef4444}
 footer{border-top:1px solid var(--border);padding:2.5rem 2rem;text-align:center;color:var(--muted);font-size:.82rem;line-height:1.8}
 footer strong{color:var(--white);font-family:'Rajdhani',sans-serif;font-size:1rem;letter-spacing:.06em}
+
+.help-box{background:rgba(26,107,255,.07);border:1px solid var(--border);border-radius:10px;padding:2rem;max-width:560px;margin:0 auto 2.5rem}
+.help-box h4{font-family:"Bebas Neue",sans-serif;font-size:1.6rem;letter-spacing:.05em;color:var(--white);margin-bottom:.4rem}
+.help-box p{color:var(--muted);font-size:.84rem;margin-bottom:1.4rem;line-height:1.6}
+.contact-links{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap}
+.clink{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.2rem;border-radius:5px;font-family:"Rajdhani",sans-serif;font-size:.88rem;font-weight:700;letter-spacing:.06em;text-decoration:none;transition:transform .2s,box-shadow .2s;text-transform:uppercase}
+.clink:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.clink.call{background:rgba(59,158,255,.15);border:1px solid rgba(59,158,255,.3);color:var(--sky)}
+.clink.email{background:rgba(240,180,41,.1);border:1px solid rgba(240,180,41,.3);color:var(--gold)}
+.clink.whatsapp{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:#22c55e}
 </style>
 </head>
 <body>
@@ -206,24 +216,54 @@ footer strong{color:var(--white);font-family:'Rajdhani',sans-serif;font-size:1re
 </section>
 
 <footer>
-  <strong>ZURI CARWASH & GARAGE</strong><br>
+  <div class="help-box">
+    <h4>Need Help? 🙋</h4>
+    <p>Our team is ready to assist you with bookings, payments, or any questions. Reach us via call, email or WhatsApp — we respond fast!</p>
+    <div class="contact-links">
+      <a href="tel:+255745383986" class="clink call">📞 Call Us</a>
+      <a href="mailto:dhulkiflyseleman026@gmail.com" class="clink email">✉️ Email Us</a>
+      <a href="https://wa.me/255745383986?text=Hello%20Zuri%20Carwash%2C%20I%20need%20help%20with%20my%20booking." target="_blank" class="clink whatsapp">💬 WhatsApp</a>
+    </div>
+    <div style="margin-top:1.2rem;font-size:.78rem;color:var(--muted)">
+      📞 +255 745 383 986 &nbsp;·&nbsp; ✉️ dhulkiflyseleman026@gmail.com
+    </div>
+  </div>
+  <strong>ZURI CARWASH AND GARAGE</strong><br>
   Tanzania · Professional Vehicle Care<br>
-  <span style="font-size:.76rem;">Payments powered by <a href="https://azampay.co.tz" target="_blank" style="color:var(--sky);text-decoration:none;">AzamPay</a> · Mobile Money · Secure &amp; Instant</span>
+  <span style="font-size:.76rem;">Payments powered by <a href="https://azampay.com" target="_blank" style="color:var(--sky);text-decoration:none;">AzamPay</a> · Mobile Money · Secure &amp; Instant</span>
 </footer>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ── AzamPay Config ─────────────────────────────────────────────
-const AZAM_CLIENT_ID     = 'd7d292c4-eb7e-48aa-8bd3-e9c4f1a919c0';
-const AZAM_CLIENT_SECRET = 'FwYJfE8Q9pSl0nNT58chG//vUj5rVLLE6YvrH342/RuS40weigrDH246glj8TUw9p9Io0UpcKv9IrnHNjiIpqqBU5MZMkPt/1gTwxPjMrn/zSint/r3kWgSGu+Dv945EQxle6Oz48dz0hHvJOV4qdBAHPmCnnhq7plIjgvJcADGva7ychrsgw3cL0ZB5YNYfIvO9GFtDWkmjbklHhCk+G18vmpVGanqxLiL0fzplSIwFIwUJJuC/5vAinDo0FEdq5hnH0EtBYFOdIkkVOzhnJ+M+VG73K6YxvdKbKkaGLPgN07kx69w4ZTy+Qj3jix8kuDYQkf3KTxrwuoOBzUYOiJLU6ZbfKY2fh3y95tuPCLsK9OiXEuSQadqXA2zyTvo4E7A9faQySE8/2yUiGPp+bw56I19gUekKisNNS95CWEIbkkJCzVA3mJMAPtngY0hHo3ulf234+RJGY08TNl8o9zlxTFBe7yXYw+9q3/g93AaVyzeIzi94RA31LiIZyRgjmjrbXsebBcPTiptO2oKMKOPmOOtO/ca9d0FNumCXXt/zOJqregwOmVzS3rQyHH8pclhSG5XMf2x+Skxc3S7HoeeemkaNt89AVa78O+nOBihIRpP5fPRQbF5UwCcA+WaVQfOLn0tXEvFws7wAk4IsBWgUrGCylAm/E2dXdnsfY00=';
-const AZAM_API_KEY       = '9c876fa0-380c-4693-9833-3e121b14c6dc';
-const RETURN_URL         = 'https://dhulkiflyseleman026-blip.github.io/zurcarwash';
-// Sandbox base — change to https://checkout.azampay.co.tz when going live
-const AZAM_AUTH_URL  = 'https://authenticator-sandbox.azampay.co.tz/AppRegistration/GenerateToken';
-const AZAM_MNO_URL   = 'https://sandbox.azampay.co.tz/azampay/mno/checkout';
-const PROXY          = 'https://corsproxy.io/?url=';
-// ──────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════
+// ⚙️  AZAMPAY CONFIGURATION
+// Fill in your credentials from the AzamPay Developer Portal:
+// https://developers.azampay.co.tz/sandbox/registerapp
+// ══════════════════════════════════════════════════════════════
+const AZAM_APP_NAME      = 'Zuri Carwash WIFI';                        // Your app name on AzamPay portal
+const AZAM_CLIENT_ID     = 'd7d292c4-eb7e-48aa-8bd3-e9c4f1a919c0'; // Client ID from AzamPay portal
+const AZAM_CLIENT_SECRET = 'VuH1o4tKAly/MWy9GGhLaGEMeIzGCTYz63Ym1+MccymWU1RirVw9PVObNKJcQd1U2D469olIgPkwrD5fPnnTajhndBWt+wKhN6kHnAGElNYzCQz725byhCYRJV0MAaAoP849RpGgFn2hatQ9GoQHN2JnDQQ1ZBbLFYmdVpivfsEWIQVp4HEBJbuqjqa6p91FyUr0OSieVf4/nvo7NkruJLCp+5xPDqvRs86/dwSJ6wsjDtj+PZA6Q83eCawTzO884Y49Qt9Bo9M6xSMhiK2YVztgBDZxSjBtk5uxvyDHxUzRcalM00f+SOW2m6ojyDyCgCQBJ/qocG2Cjtl8MwpEUzIDp6ahq+CRaRIV8cYKWQ2nxBlAuGc5xzTcSQjJQPmzNMIHUwWfc+jbDiZAiwjg+81Go9OS+CB3SNjfdGhEO3dGmd1QWG7qEZNvEpZ8M5+sdvXvufDiYkMkb1IV5vi12rKXJBdFPVT6rsYUDTWC7/U7saFd/WTF1Tncp59oDILd3ZTzsR2VGR23Gy66a7EG7rcah6YK3IPxb65AKdOub19KjuMpp0nUsL61kPCzMYSfzR9NWleGxwdW3rW7bgoruTkA7Oa+cYXzpR/xL7U6qE1vxU2w2PZVqt0sR6hT5A5KdGjkTbej2kOjfLsC61m7LXUzftgduaUhlke2l7cHLC8='; // Client Secret from AzamPay portal
+const AZAM_API_KEY       = '9c876fa0-380c-4693-9833-3e121b14c6dc'; // X-API-Key from AzamPay portal
+
+// ── Callback URL (where AzamPay sends payment result) ──────────
+// This MUST match what you register on the AzamPay portal
+const CALLBACK_URL  = 'https://dhulkiflyseleman026-blip.github.io/zurcarwash/callback';
+
+// ── Return URL (where customer is sent after payment) ──────────
+const RETURN_URL    = 'https://dhulkiflyseleman026-blip.github.io/zurcarwash';
+
+// ── AzamPay API Endpoints ──────────────────────────────────────
+// SANDBOX (testing):
+const AZAM_AUTH_URL = 'https://authenticator-sandbox.azampay.co.tz/AppRegistration/GenerateToken';
+const AZAM_MNO_URL  = 'https://sandbox.azampay.co.tz/azampay/mno/checkout';
+// PRODUCTION (go live — replace sandbox URLs above with these):
+// const AZAM_AUTH_URL = 'https://authenticator.azampay.co.tz/AppRegistration/GenerateToken';
+// const AZAM_MNO_URL  = 'https://checkout.azampay.co.tz/azampay/mno/checkout';
+
+// ── CORS Proxy (required for single-file browser-based calls) ──
+const PROXY = 'https://corsproxy.io/?url=';
+// ══════════════════════════════════════════════════════════════
 
 const SERVICES=[
   {id:'m1',name:'Pressure Motorcycle Wash',     price:1000,  icon:'🏍️',cat:'motorcycle'},
@@ -363,30 +403,31 @@ async function pay(){
 
   try {
     // Step 1: Get access token
+    // Step 1: Authenticate — get Bearer token using appName, clientId, clientSecret
     const authRes = await fetch(PROXY+encodeURIComponent(AZAM_AUTH_URL),{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        appName: 'ZuriCarwash',
-        clientId: AZAM_CLIENT_ID,
+        appName:      AZAM_APP_NAME,   // registered app name on AzamPay portal
+        clientId:     AZAM_CLIENT_ID,
         clientSecret: AZAM_CLIENT_SECRET,
       }),
     });
     const authData = await authRes.json();
     const token = authData.data?.accessToken;
-    if(!token) throw new Error(authData.message || 'Failed to get auth token');
+    if(!token) throw new Error(authData.message || 'Failed to get auth token. Check your credentials.');
 
-    // Step 2: MNO Checkout
+    // Step 2: MNO Checkout — initiate mobile money payment
     const payload={
-      accountNumber: phone,
-      amount:        String(total),
+      accountNumber: phone,          // customer mobile number e.g. 255763456789
+      amount:        String(total),  // amount in TZS
       currency:      'TZS',
-      externalId:    extId,
-      provider:      provider,
-      callbackUrl:   RETURN_URL,
+      externalId:    extId,          // unique transaction ID from our system
+      provider:      provider,       // Mpesa | Airtel | Tigo | Halopesa | Azampesa
+      callbackUrl:   CALLBACK_URL,   // AzamPay posts payment result here
       additionalProperties:{
-        customerName: name,
-        services:     names.substring(0,100),
+        customerName: name.substring(0,64),
+        services:     names.substring(0,64),
       },
     };
 
