@@ -402,29 +402,37 @@ async function pay(){
   btn.classList.add('loading');btn.disabled=true;
 
   try {
-    // Step 1: Get access token
-    // Step 1: Authenticate — get Bearer token using appName, clientId, clientSecret
+    // Step 1: Authenticate — get Bearer token
     const authRes = await fetch(PROXY+encodeURIComponent(AZAM_AUTH_URL),{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        appName:      AZAM_APP_NAME,   // registered app name on AzamPay portal
+        appName:      AZAM_APP_NAME,
         clientId:     AZAM_CLIENT_ID,
         clientSecret: AZAM_CLIENT_SECRET,
       }),
     });
-    const authData = await authRes.json();
+
+    // Safely parse auth response
+    const authText = await authRes.text();
+    if(!authText || authText.trim()===''){
+      throw new Error('No response from AzamPay authentication server. Check your credentials or try again.');
+    }
+    let authData;
+    try { authData = JSON.parse(authText); }
+    catch(e){ throw new Error('Auth server returned invalid response: '+authText.substring(0,100)); }
+
     const token = authData.data?.accessToken;
-    if(!token) throw new Error(authData.message || 'Failed to get auth token. Check your credentials.');
+    if(!token) throw new Error(authData.message || authData.error || 'Failed to get auth token. Check credentials.');
 
     // Step 2: MNO Checkout — initiate mobile money payment
     const payload={
-      accountNumber: phone,          // customer mobile number e.g. 255763456789
-      amount:        String(total),  // amount in TZS
+      accountNumber: phone,
+      amount:        String(total),
       currency:      'TZS',
-      externalId:    extId,          // unique transaction ID from our system
-      provider:      provider,       // Mpesa | Airtel | Tigo | Halopesa | Azampesa
-      callbackUrl:   CALLBACK_URL,   // AzamPay posts payment result here
+      externalId:    extId,
+      provider:      provider,
+      callbackUrl:   CALLBACK_URL,
       additionalProperties:{
         customerName: name.substring(0,64),
         services:     names.substring(0,64),
@@ -440,17 +448,25 @@ async function pay(){
       },
       body:JSON.stringify(payload),
     });
-    const data = await res.json();
 
-    if(res.ok && (data.transactionId || data.message)){
-      showToast('✅ Payment request sent! Check your phone for USSD prompt.','success');
+    // Safely parse checkout response
+    const resText = await res.text();
+    if(!resText || resText.trim()===''){
+      throw new Error('Empty response from AzamPay checkout. Please try again.');
+    }
+    let data;
+    try { data = JSON.parse(resText); }
+    catch(e){ throw new Error('Checkout returned invalid response: '+resText.substring(0,100)); }
+
+    if(res.ok && (data.transactionId || data.message || data.success)){
+      showToast('✅ Payment request sent! Check your phone for the USSD prompt.','success');
       setTimeout(()=>{window.location.href=RETURN_URL+'?externalId='+extId;},3000);
     } else {
-      showToast('❌ '+(data.message||data.errorMessage||JSON.stringify(data)),'error');
+      showToast('❌ '+(data.message||data.errorMessage||data.error||JSON.stringify(data)),'error');
       btn.classList.remove('loading');btn.disabled=false;
     }
   } catch(e){
-    showToast('❌ Error: '+e.message,'error');
+    showToast('❌ '+e.message,'error');
     btn.classList.remove('loading');btn.disabled=false;
   }
 }
